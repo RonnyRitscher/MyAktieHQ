@@ -234,10 +234,10 @@ public class AktienlisteFragment extends Fragment {
                 }
             }
 
-            //PARSEN und AUSLESEN des XML-STREAMS
+            //PARSEN und AUSLESEN des XML-STREAMS  ... sie he Methode leseXmlAktiendatenAus()
+            String[] ergebnis = leseXmlAktiendatenAus(aktiendatenXmlString);
 
-
-            return null;
+            return ergebnis;
         }
 
         @Override
@@ -247,6 +247,7 @@ public class AktienlisteFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String[] strings) { //Sachen NACH der Ausführung - zb Arrayadapter mit den neuen Daten bestücken
+
             // Wir löschen den Inhalt des ArrayAdapters und fügen den neuen Inhalt ein
             // Der neue Inhalt ist der Rückgabewert von doInBackground(String...) also
             // der StringArray gefüllt mit Beispieldaten
@@ -292,17 +293,31 @@ public class AktienlisteFragment extends Fragment {
             int anzahlAktien = aktienListe.getLength();
             int anzahlAktienParameter = aktienListe.item(0).getChildNodes().getLength();
 
-            String[] ausgabeArray = new String[anzahlAktien];
+            String[] ausgabeArray = new String[anzahlAktien];    //Dieses Array soll bestückt zurückgegeben werden
             String[][] alleAktienDatenArray = new String[anzahlAktien][anzahlAktienParameter];
 
             Node aktienParameter;
             String aktienParameterWert;
 
-//            for(int i=0 ; i<anzahlAktien ; i++){
-//                NodeList
-//            }
+            for(int i=0 ; i<anzahlAktien ; i++){
+                NodeList aktienParameterListe = aktienListe.item(i).getChildNodes();
 
-            return null;
+                for(int j=0 ; j<anzahlAktienParameter ; j++ ){
+                    aktienParameter = aktienParameterListe.item(j);
+                    aktienParameterWert = aktienParameter.getFirstChild().getNodeValue();
+                    alleAktienDatenArray[i][j] = aktienParameterWert;
+                }
+
+                ausgabeArray[i]  = alleAktienDatenArray[i][0];                // symbol
+                ausgabeArray[i] += ": " + alleAktienDatenArray[i][4];         // price
+                ausgabeArray[i] += " " + alleAktienDatenArray[i][2];          // currency
+                ausgabeArray[i] += " (" + alleAktienDatenArray[i][8] + ")";   // percent
+                ausgabeArray[i] += " - [" + alleAktienDatenArray[i][1] + "]"; // name
+
+                Log.d(TAG, "leseXmlAktiendatenAus: " + ausgabeArray[i]);
+            }
+
+            return ausgabeArray;
         }
     }
 
