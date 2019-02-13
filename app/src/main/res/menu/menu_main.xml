@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Das MENU muss in onCreateOptionsMenu angesprochen werden-->
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    tools:context=".MainActivity">
+
+    <!-- Das (neue) Item muss in dem onOptionsItemSelected eingebunden und mit funktionen initialisiert werden -->
+    <item
+    android:id="@+id/action_settings"
+    android:title="@string/action_settings"
+    android:orderInCategory="100"
+    app:showAsAction="never"
+    />
+
+    <item
+        android:id="@+id/action_profile"
+        android:title="@string/action_user"
+        android:orderInCategory="200"
+        app:showAsAction="never"
+        />
+
+
+
+</menu>
