@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.myaktiehq">
 
-    <!-- Permission/Berechtigungen * bei restrictiven muss der Benutzer bestätigen -->
+    <!-- Permission/Berechtigungen *** bei restrictiven muss der Benutzer bestätigen -->
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
