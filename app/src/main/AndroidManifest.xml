@@ -39,11 +39,13 @@
 
         </activity>
 
-        <!-- Activity für die Einstellungen/Preferences/Settings -->
+        <!-- Activity für die Einstellungen/Preferences/Settings -> erweitert um das syle/SettingsTheme-->
         <activity
             android:name=".EinstellungenActivity"
             android:label="@string/title_activity_einstellungen"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/SettingsTheme">
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity"/>
