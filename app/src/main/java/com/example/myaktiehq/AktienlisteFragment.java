@@ -2,8 +2,11 @@ package com.example.myaktiehq;
 
 
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,9 +17,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.w3c.dom.Document;
@@ -97,6 +100,22 @@ public class AktienlisteFragment extends Fragment {
         //ADAPTER heransetzen:
         aktienlisteListView.setAdapter(mAktienListeAdapter);
 
+        // T10 - Der Listview einen setOnItemClickListener
+        aktienlisteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String aktieninfo = (String) parent.getItemAtPosition(position);
+
+                // INTENT um eine NEUE ACTIVITY aufzurufen/zu starten:
+                // -> new Intent(wo kommt es her, class wo soll es hin);
+                Intent aktiendetailIntent = new Intent(getActivity(), AktiendetailActivity.class);
+                aktiendetailIntent.putExtra(Intent.EXTRA_TEXT , aktieninfo);
+
+                startActivity(aktiendetailIntent);  //ruft die De
+            }
+        });
+
+
         /*als Returntyp muss über inflater das Layout angegeben werden */
         return rootView;
     }
@@ -126,8 +145,33 @@ public class AktienlisteFragment extends Fragment {
                 // Methode zum aktualisieren der Daten
                 // Erzeugen einer Instanz von HoleDatenTask und starten des asynchronen Tasks
                 HoleDatenTask holeDatenTask = new HoleDatenTask();
-                holeDatenTask.execute("Aktie");
 
+
+                // Auslesen der ausgewählten Aktienliste aus den SharedPreferences
+                SharedPreferences sPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());    // holt den DefaultSharedPref der aktuellen Activity über PrefManager
+                String prefAktienlisteKey = getString(R.string.preference_aktienliste_key) ;                // holt den Key von preference.xml
+                String prefAktienlisteDefault = getString(R.string.preference_aktienliste_default);         // holt den Default-Value von preference.xml
+                String akliste = sPrefs.getString(prefAktienlisteKey, prefAktienlisteDefault); //  ,ODER,   sPrefs.getString(gesetzter/hinterlegter Wert , oder wenn nicht vorhanden den Default-Wert);
+
+                // Auslesen des Anzeige-Modus aus den SharedPreferences
+                String prefIndizemodusKey = getString(R.string.preference_indizemodus_key);
+                Boolean indizemodus = sPrefs.getBoolean(prefIndizemodusKey, false);
+
+                // Starten des asynchronen Tasks und Übergabe der Aktienliste
+                if (indizemodus) {
+                    String indizeliste = "^GDAXI,^TECDAX,^MDAXI,^SDAXI,^GSPC,^N225,^HSI,XAGUSD=X,XAUUSD=X";
+
+                    // Aufruf über der ausgewählten Indizeliste
+                    holeDatenTask.execute(indizeliste);
+                }else{
+                    // Aufruf über der ausgewählten Aktienliste
+                    holeDatenTask.execute(akliste);
+                }
+
+
+
+
+                // Den Benutzer informieren, dass neue Aktiendaten im Hintergrund abgefragt werden
                 // this geht nicht in einem Fragment -> wir nutzen getActivity()
                 Toast.makeText(getActivity(), "Aktualisierung gedrückt", Toast.LENGTH_SHORT).show();
                 return true;
@@ -181,7 +225,8 @@ public class AktienlisteFragment extends Fragment {
             // Wir konstruieren die Anfrage-URL für unseren Web-Server
             final String URL_PARAMETER = "http://www.programmierenlernenhq.de/tools/query.php";
 
-            String symbols = "DAI.DE,BMW.DE";
+            // symbols = "DAI.DE,BMW.DE";  -> ...geändert...
+            String symbols = strings[0];
 
             String anfrageString = URL_PARAMETER + "?s=" + symbols;
             Log.d(TAG, "doInBackground: anfrageString -> " + anfrageString);            //TEST ob string richtig zusammengesetzt ist

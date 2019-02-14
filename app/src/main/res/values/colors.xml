@@ -6,6 +6,6 @@
 
     <color name="colorUserPrimary">#0240EB</color>
     <color name="colorUserPrimaryDark">#000C57</color>
-    <color name="colorUserAccent">#FF0000</color>
+    <color name="colorUserAccent">#6377FF</color>
 
 </resources>
