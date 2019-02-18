@@ -106,7 +106,7 @@ public class AktienlisteFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String aktieninfo = (String) parent.getItemAtPosition(position);
 
-                // INTENT um eine NEUE ACTIVITY aufzurufen/zu starten:
+                // EXPLIZITER intent um eine NEUE ACTIVITY aufzurufen/zu starten:
                 // -> new Intent(wo kommt es her, class wo soll es hin);
                 Intent aktiendetailIntent = new Intent(getActivity(), AktiendetailActivity.class);
                 aktiendetailIntent.putExtra(Intent.EXTRA_TEXT , aktieninfo);

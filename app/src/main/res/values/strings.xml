@@ -6,6 +6,8 @@
     <string name="action_settings">Einstellungen</string>
     <string name="action_user">Profil</string>
     <string name="action_daten_aktualisieren">Aktualisieren</string>
+    <string name="action_starte_browser">Mehr Infos anzeigen</string>
+    <string name="action_teile_aktiendaten">Teilen</string>
 
     <!-- Strings zu Activitys oder Fragmente  -->
     <string name="title_activity_aktiendetail">Aktiendetails</string>
@@ -17,8 +19,8 @@
     <string name="preference_aktienliste_key">aktienliste</string>
 
     <string name="preference_indizemodus_titel">Marktübersicht</string>
-    <string name="preference_indizemodus_key">indizemodus</string>
-    <string name="preference_indizemodus_summary">Eine Indizeliste wird anstelle der Aktienliste angezeigt.</string>
+    <string name="preference_indizemodus_key">Indizemodus</string>
+    <string name="preference_indizemodus_summary">Eine Indize-Liste wird anstelle der Aktienliste angezeigt.</string>
 
 
 </resources>

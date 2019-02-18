@@ -9,13 +9,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    /* LOG - Informationen*/
+    /* Nur für die LOG-Informationen*/
     private static final String TAG = MainActivity.class.getSimpleName();
-    /* SharedPreference */
+
+    /* SharedPreferences */
     private EditText userName;
 
     @Override
@@ -38,15 +40,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    //Methode zum einbinden des erstellten Menu-Items in den Head (...)
+    //Methode zum einbinden des erstellten Menu-Items in dem Header-Bereich (...)
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //inflate des menu
+        //getMenuInflater().inflate() verwenden, um das menu einzubinden
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
-    // anklicken des MenuItems   (Menu hat einen listener)
+    // Methode zum anklicken der MenuItems (Menu hat einen listener)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -54,28 +56,31 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_settings:
                 Toast.makeText(this, "Settings wurde gedrückt", Toast.LENGTH_SHORT).show();
 
+                /*AUSGEBLENDET - KANN GGF GELÖSCHT WERDEN!
                 //TextView textViewSettings = findViewById(R.id.fragment_main_textView);
                 //textViewSettings.setText("GEÄNDERT - Einstellung wird angezeigt");
+                */
 
                 // einbinden des Intent für die Menü-Weiterleitung zu den Einstellungen
-                startActivity(new Intent(this ,  EinstellungenActivity.class));
+                startActivity(new Intent(this, EinstellungenActivity.class));
 
                 return true;
 
             case R.id.action_profile:
                 Toast.makeText(this, "Profil wurde gedrückt", Toast.LENGTH_SHORT).show();
-                //TextView textViewProfile = findViewById(R.id.fragment_main_textView);
-                //textViewProfile.setText("GEÄNDERT - Profil wird angezeigt");
+
+                /*AUSGEBLENDET - KANN GGF GELÖSCHT WERDEN!
+                TextView textViewProfile = findViewById(R.id.fragment_main_textView);
+                textViewProfile.setText("GEÄNDERT - Profil wird angezeigt");
+                */
 
                 return true;
 
             default:
-
                 return super.onOptionsItemSelected(item);
         }
 
     }
-
 
 
     @Override

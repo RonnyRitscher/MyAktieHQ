@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- DIMEN für die dimensionale Darstellung verwenden-->
     <dimen name="activity_horizontal_margin"> 16dp </dimen>
     <dimen name="activity_vertical_margin"> 16dp </dimen>
 

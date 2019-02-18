@@ -3,7 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.myaktiehq">
 
-    <!-- Permission/Berechtigungen * bei restrictiven muss der Benutzer bestätigen -->
+    <!-- Permission/Berechtigungen
+        -> bei "normalen, seriösen" zugriffen muss der Benutzer die permission NICHT bestätigen
+    -->
     <uses-permission
         android:name="android.permission.INTERNET" />
 
@@ -14,7 +16,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme_User">
-
 
         <activity
             android:name=".MainActivity">
@@ -27,6 +28,10 @@
             </intent-filter>
         </activity>
 
+
+        <!-- BACK-BUTTON -> Um einen Uurück-Button in der Activity/dem Fragment anzeigen
+        und verwenden zu können nutzen wir die angabe des "android:parentActivityName",
+        bzw der angabe in den Meta-data für ältere Versionen  -->
         <!-- Activity für die AktienDetails -->
         <activity
             android:name=".AktiendetailActivity"
@@ -39,17 +44,15 @@
 
         </activity>
 
-        <!-- Activity für die Einstellungen/Preferences/Settings -> erweitert um das syle/SettingsTheme-->
+        <!-- Activity für die Einstellungen/Preferences/Settings -> erweitert um das style/SettingsTheme-->
         <activity
             android:name=".EinstellungenActivity"
             android:label="@string/title_activity_einstellungen"
             android:parentActivityName=".MainActivity"
             android:theme="@style/SettingsTheme">
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity"/>
-
         </activity>
 
 

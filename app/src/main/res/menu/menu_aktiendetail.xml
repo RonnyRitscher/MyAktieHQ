@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!-- Menu-Eintrag für die Einstellungen -->
     <item
         android:id="@+id/action_settings"
         android:title="@string/action_settings"
@@ -10,11 +11,38 @@
         app:showAsAction="never"
         />
 
+    <!-- Menu-Eintrag für das USER-PROFIL  -->
     <item
         android:id="@+id/action_profile"
         android:title="@string/action_user"
         android:orderInCategory="200"
         app:showAsAction="never"
         />
+
+    <!-- Menu-Eintrag für das anzeigen weiterer DETAILS IM BROSER -->
+    <item
+        android:id="@+id/action_starte_browser"
+        android:title="@string/action_starte_browser"
+        android:orderInCategory="50"
+        app:showAsAction="never"
+        />
+
+    <!-- Menu-Eintrag für das Teilen der Daten/ Share-Menü -->
+    <item
+        android:id="@+id/action_teile_aktiendaten"
+        android:title="@string/action_teile_aktiendaten"
+        app:showAsAction="always"
+        app:actionProviderClass="android.support.v7.widget.ShareActionProvider" />
+
+
+
+    <!-- LEGENDE/NOTES:
+        android:orderInCategory="INT-POSITION" -> Platzieung der Menü-Einträge
+
+        app:showAsAction="never" -> Zeigt den Eintrag unter den dem MenuPunkt an
+        app:showAsAction="always" -> Zeigt den Eintrag unter den der ActionBar direkt an
+
+        app:actionProviderClass="android.support.v7.widget.ShareActionProvider" -> gibt an welche Klasse als ShareActionProvider verwendet werden soll
+    -->
 
 </menu>

@@ -12,7 +12,8 @@ public class EinstellungenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        //Toast.makeText(this, "Einstellungen wurde gestartet", Toast.LENGTH_SHORT).show(); //KANN ENTFERNT WERDEN
+//
+//        Toast.makeText(this, "Einstellungen wurde gestartet", Toast.LENGTH_SHORT).show(); //KANN ENTFERNT WERDEN
 //
 //        addPreferencesFromResource(R.xml.preferences);          //!DEPRICATED
 //        Preference aktienlistePref = findPreference(getString(R.string.preference_aktienliste_key)); // identifiziert den Key der Pref
@@ -23,7 +24,7 @@ public class EinstellungenActivity extends AppCompatActivity {
 //        String gespeicherteAktienliste = sharedPrefs.getString(aktienlistePref.getKey(), ""); //
 //        onPreferenceChange(aktienlistePref, gespeicherteAktienliste); // ruft die Methode oPC mit Parametern auf
 
-        // Hier binden wir das EinstellungsFragment in der Activity ein
+        // Hier binden wir das erstellte EinstellungsFragment in die Activity ein
         // ...nicht den  getFragmentManager(), da wir über "extends AppCompatActivity" arbeiten
         getSupportFragmentManager()
                 .beginTransaction()
@@ -33,12 +34,14 @@ public class EinstellungenActivity extends AppCompatActivity {
     }
 
 
-//    @Override
-//    public boolean onPreferenceChange(Preference preference, Object newValue) {
-//
-//        preference.setSummary(newValue.toString());             // Summary ist der wert/value von "preference_aktienliste_default"
-//                                                                // ... da vom typ Objekt der Aufruf von toString()
-//                                                                //... zeigt den eingetragenen Value (kleiner, unterhalb) des Keys an
-//        return true;
-//    }
+        /*AUSGEBLENDET, KANN GGF GELÖSCHT WERDEN!
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+
+            preference.setSummary(newValue.toString());             // Summary ist der wert/value von "preference_aktienliste_default"
+                                                                    // ... da vom typ Objekt der Aufruf von toString()
+                                                                    //... zeigt den eingetragenen Value (kleiner, unterhalb) des Keys an
+            return true;
+        }
+        */
 }

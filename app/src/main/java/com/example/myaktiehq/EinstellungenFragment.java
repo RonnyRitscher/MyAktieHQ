@@ -6,7 +6,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
-
+//Wir verwenden PreferenceFragmentCompat statt PreferenceFragment
 public class EinstellungenFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener {
 
     //eingefügt von EinstellungenActivity
