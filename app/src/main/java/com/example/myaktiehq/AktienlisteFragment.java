@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -50,6 +51,9 @@ public class AktienlisteFragment extends Fragment {
     /*LOGGING  -  TESTEN ob etwas vohenden ist - siehe unten*/
     public static final String TAG = AktienlisteFragment.class.getSimpleName();
     private ArrayAdapter<String> mAktienListeAdapter;
+
+    //SwipeLayout
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     /* default Konstruktor */
     public AktienlisteFragment(){
@@ -110,11 +114,17 @@ public class AktienlisteFragment extends Fragment {
                 // -> new Intent(wo kommt es her, class wo soll es hin);
                 Intent aktiendetailIntent = new Intent(getActivity(), AktiendetailActivity.class);
                 aktiendetailIntent.putExtra(Intent.EXTRA_TEXT , aktieninfo);
-
-                startActivity(aktiendetailIntent);  //ruft die De
+                //startet die Activity
+                startActivity(aktiendetailIntent);
             }
         });
 
+
+        // Bekanntgabe des SwipeRefreshLayouts
+        mSwipeRefreshLayout = rootView.findViewById(R.id.swipe_refresh_layout_aktienliste);
+        // OnRefreshListener anhängen -> verwenden von Lambda und Consumer
+        // -> einzige Methode ist die onRefresh(), daher Lambda möglich!
+        mSwipeRefreshLayout.setOnRefreshListener( () -> aktualisiereDaten());
 
         /*als Returntyp muss über inflater das Layout angegeben werden */
         return rootView;
@@ -142,42 +152,45 @@ public class AktienlisteFragment extends Fragment {
 
         switch (item.getItemId()){
             case R.id.action_daten_aktualisieren:
-                // Methode zum aktualisieren der Daten
-                // Erzeugen einer Instanz von HoleDatenTask und starten des asynchronen Tasks
-                HoleDatenTask holeDatenTask = new HoleDatenTask();
-
-
-                // Auslesen der ausgewählten Aktienliste aus den SharedPreferences
-                SharedPreferences sPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());    // holt den DefaultSharedPref der aktuellen Activity über PrefManager
-                String prefAktienlisteKey = getString(R.string.preference_aktienliste_key) ;                // holt den Key von preference.xml
-                String prefAktienlisteDefault = getString(R.string.preference_aktienliste_default);         // holt den Default-Value von preference.xml
-                String akliste = sPrefs.getString(prefAktienlisteKey, prefAktienlisteDefault); //  ,ODER,   sPrefs.getString(gesetzter/hinterlegter Wert , oder wenn nicht vorhanden den Default-Wert);
-
-                // Auslesen des Anzeige-Modus aus den SharedPreferences
-                String prefIndizemodusKey = getString(R.string.preference_indizemodus_key);
-                Boolean indizemodus = sPrefs.getBoolean(prefIndizemodusKey, false);
-
-                // Starten des asynchronen Tasks und Übergabe der Aktienliste
-                if (indizemodus) {
-                    String indizeliste = "^GDAXI,^TECDAX,^MDAXI,^SDAXI,^GSPC,^N225,^HSI,XAGUSD=X,XAUUSD=X";
-
-                    // Aufruf über der ausgewählten Indizeliste
-                    holeDatenTask.execute(indizeliste);
-                }else{
-                    // Aufruf über der ausgewählten Aktienliste
-                    holeDatenTask.execute(akliste);
-                }
-
-
-
-
-                // Den Benutzer informieren, dass neue Aktiendaten im Hintergrund abgefragt werden
-                // this geht nicht in einem Fragment -> wir nutzen getActivity()
-                Toast.makeText(getActivity(), "Aktualisierung gedrückt", Toast.LENGTH_SHORT).show();
+                aktualisiereDaten();
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void aktualisiereDaten() {
+        // Methode zum aktualisieren der Daten
+        // Erzeugen einer Instanz von HoleDatenTask und starten des asynchronen Tasks
+        HoleDatenTask holeDatenTask = new HoleDatenTask();
+
+
+        // Auslesen der ausgewählten Aktienliste aus den SharedPreferences
+        SharedPreferences sPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());    // holt den DefaultSharedPref der aktuellen Activity über PrefManager
+        String prefAktienlisteKey = getString(R.string.preference_aktienliste_key) ;                // holt den Key von preference.xml
+        String prefAktienlisteDefault = getString(R.string.preference_aktienliste_default);         // holt den Default-Value von preference.xml
+        String akliste = sPrefs.getString(prefAktienlisteKey, prefAktienlisteDefault); //  ,ODER,   sPrefs.getString(gesetzter/hinterlegter Wert , oder wenn nicht vorhanden den Default-Wert);
+
+        // Auslesen des Anzeige-Modus aus den SharedPreferences
+        String prefIndizemodusKey = getString(R.string.preference_indizemodus_key);
+        Boolean indizemodus = sPrefs.getBoolean(prefIndizemodusKey, false);
+
+        // Starten des asynchronen Tasks und Übergabe der Aktienliste
+        if (indizemodus) {
+            String indizeliste = "^GDAXI,^TECDAX,^MDAXI,^SDAXI,^GSPC,^N225,^HSI,XAGUSD=X,XAUUSD=X";
+
+            // Aufruf über der ausgewählten Indizeliste
+            holeDatenTask.execute(indizeliste);
+        }else{
+            // Aufruf über der ausgewählten Aktienliste
+            holeDatenTask.execute(akliste);
+        }
+
+
+        // Den Benutzer informieren, dass neue Aktiendaten im Hintergrund abgefragt werden
+        // this geht nicht in einem Fragment -> wir nutzen getActivity()
+        Toast.makeText(getActivity(), "Aktualisierung gedrückt", Toast.LENGTH_SHORT).show();
+
     }
 
     //-------------------------------------------------------------------------

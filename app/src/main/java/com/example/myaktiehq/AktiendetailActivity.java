@@ -59,7 +59,8 @@ public class AktiendetailActivity extends AppCompatActivity {
         MenuItem shareMenuItem = menu.findItem(R.id.action_teile_aktiendaten);
 
         // Holt den ShareActionProvider über den Share-Menüeintrag
-        // Der CAST ist erforderlich, da wie die android.support.v7.widget.ShareActionProvider verwenden
+        // -> Der CAST ist erforderlich, da wie die android.support.v7.widget.ShareActionProvider verwenden
+        // -> zeigt in der ActionBar alle verfügbaren Schnittstellen an
         ShareActionProvider sAP;
         sAP = (ShareActionProvider) MenuItemCompat.getActionProvider(shareMenuItem);
 
@@ -67,7 +68,7 @@ public class AktiendetailActivity extends AppCompatActivity {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
 
         //noinspection deprecation
-        // -> .addFlags() verhindern wir, dass die aufzurufende Share-Activity in den Activity Stack aufgenommen wird.
+        // -> .addFlags(XXX) verhindern wir, dass die aufzurufende Share-Activity in den Activity Stack aufgenommen wird.
         // -> wenn die App in den Hintergrung läuft, soll wieder die App aufgerufen werden
         // -> Dadurch wird später immer unsere App geöffnet, wenn das Symbol unserer App geklickt wurde und nicht unter Umständen die Activity einer anderen App.
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
