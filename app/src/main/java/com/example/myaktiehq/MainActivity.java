@@ -19,14 +19,14 @@ public class MainActivity extends AppCompatActivity {
 
     /* SharedPreferences */
     private EditText userName;
-
+    //------------------------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         /* LOG - Informationen*/
-        Log.d(TAG, "onCreate: View ist fertig!");
+        Log.d(TAG, "onCreate: View ist fertig gebaut!");
 
 
         /*
@@ -38,8 +38,34 @@ public class MainActivity extends AppCompatActivity {
         userName.setText(userSP.getString("userName" , "Gast"));
         */
     }
+    //------------------------------------------------------------------
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: kurz vor sichtbar werden!");
+    }
+
+    //------------------------------------------------------------------
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: für interaktionen bereit! -> (Wieder-)Aufnahme der Activity");
+    }
 
 
+    //------------------------------------------------------------------
+
+    @Override
+    protected void onPause() {
+
+        Log.d(TAG, "onPause: kurz vor in den Hintergrund gehen -> zum speichern von Änderungen des Benutzers -> (wird aufgerufen bevor eine andere Activity startet)");
+    }
+
+
+    //------------------------------------------------------------------
+    
     //Methode zum einbinden des erstellten Menu-Items in dem Header-Bereich (...)
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

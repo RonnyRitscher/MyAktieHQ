@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- Das FrameLayout wurde geändert in SwipeRefreshLayout geändert-->
+<!-- Das FrameLayout wurde geändert in SwipeRefreshLayout geändert
+ -> zum aktualisieren beim herunter-wischen in der App-->
 <android.support.v4.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"

@@ -52,7 +52,7 @@ public class AktienlisteFragment extends Fragment {
     public static final String TAG = AktienlisteFragment.class.getSimpleName();
     private ArrayAdapter<String> mAktienListeAdapter;
 
-    //SwipeLayout
+    //SwipeRefreshLayout - zum aktualisieren beim herunter-wischen in der App
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     /* default Konstruktor */
@@ -70,19 +70,24 @@ public class AktienlisteFragment extends Fragment {
         Log.e(TAG, "onCreateView: Errormeldung ");
 
         //-------------------------------------------------------------------------
-        /*Dummy-Daten für die ListView über eine ArrayList<>*/
-        String [] aktienlisteArray = {
-                "Adidas - Kurs: 73,45 €",
-                "Allianz - Kurs: 145,12 €",
-                "BASF - Kurs: 84,27 €",
-                "Bayer - Kurs: 128,60 €",
-                "Beiersdorf - Kurs: 80,55 €",
-                "BMW St. - Kurs: 104,11 €",
-                "Commerzbank - Kurs: 12,47 €",
-                "Continental - Kurs: 209,94 €",
-                "Daimler - Kurs: 84,33 €"
-        };
-        List<String> aktienListe = new ArrayList<>(Arrays.asList(aktienlisteArray));
+          /*Temporäre Dummy-Daten für die ListView über eine ArrayList<>*/
+//        //-> KANN AUFGRUND DES SWIPEREFRESH ENTFERNT WERDEN <-
+//        String [] aktienlisteArray = {
+//                "Adidas - Kurs: 73,45 €",
+//                "Allianz - Kurs: 145,12 €",
+//                "BASF - Kurs: 84,27 €",
+//                "Bayer - Kurs: 128,60 €",
+//                "Beiersdorf - Kurs: 80,55 €",
+//                "BMW St. - Kurs: 104,11 €",
+//                "Commerzbank - Kurs: 12,47 €",
+//                "Continental - Kurs: 209,94 €",
+//                "Daimler - Kurs: 84,33 €"
+//        };
+
+
+        //List<String> aktienListe = new ArrayList<>(Arrays.asList(aktienlisteArray));
+        List<String> aktienListe = new ArrayList<>();
+
 
         /*ADAPTER für die Liste erzeugen  - über Refactoring*/
         mAktienListeAdapter = new ArrayAdapter<>(
@@ -105,7 +110,7 @@ public class AktienlisteFragment extends Fragment {
         aktienlisteListView.setAdapter(mAktienListeAdapter);
 
         // T10 - Der Listview einen setOnItemClickListener
-        aktienlisteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        aktienlisteListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String aktieninfo = (String) parent.getItemAtPosition(position);
@@ -120,11 +125,16 @@ public class AktienlisteFragment extends Fragment {
         });
 
 
+        // SWIPE-REFRESH
         // Bekanntgabe des SwipeRefreshLayouts
         mSwipeRefreshLayout = rootView.findViewById(R.id.swipe_refresh_layout_aktienliste);
-        // OnRefreshListener anhängen -> verwenden von Lambda und Consumer
-        // -> einzige Methode ist die onRefresh(), daher Lambda möglich!
+        // OnRefreshListener anhängen
+        // -> verwenden von Lambda -> einzige Methode ist die onRefresh(), daher Lambda möglich!
         mSwipeRefreshLayout.setOnRefreshListener( () -> aktualisiereDaten());
+
+        // Um die aktuellen Daten beim Starten zu laden die Methode  aktualisiereDaten() im onCreate() ausführen
+        // -> die temporären Dummy-Daten werden dann nicht mehr angezeigt
+        aktualisiereDaten();
 
         /*als Returntyp muss über inflater das Layout angegeben werden */
         return rootView;
@@ -204,7 +214,8 @@ public class AktienlisteFragment extends Fragment {
 
         @Override
         protected String[] doInBackground(String... strings) {
-//            AUSKOMMENTIERT! NUR ZU DUMMY-ZWECKEN
+//            // AUSKOMMENTIERT! NUR ZU DUMMY-ZWECKEN
+//
 //            String[] ergebnisArray = new String[20]; //HardCoded StringArray
 //
 //            for(int i=0 ; i<20 ; i++ ){
@@ -311,10 +322,15 @@ public class AktienlisteFragment extends Fragment {
             // der StringArray gefüllt mit Beispieldaten
             if( strings != null){
                 mAktienListeAdapter.clear(); //zurücksetzen des Adapters
-                // Bestücken des Adapters
-                for(String aktienString : strings){
-                    mAktienListeAdapter.add(aktienString);
-                }
+//                // Bestücken des Adapters über forEach()
+//                for(String aktienString : strings){
+//                    mAktienListeAdapter.add(aktienString);
+//                }
+                // Bestücken des Adapters über addAll()
+                mAktienListeAdapter.addAll(strings);
+
+                // Mitteilung/auschalten um das DAUERHAFTE Laden zu beenden
+                mSwipeRefreshLayout.setRefreshing(false);
             }
             Toast.makeText(getActivity(), "Daten wurden vollständig geladen...", Toast.LENGTH_SHORT).show();
         }
