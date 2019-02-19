@@ -2,6 +2,7 @@ package com.example.myaktiehq;
 
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -48,31 +49,51 @@ import javax.xml.parsers.ParserConfigurationException;
 public class AktienlisteFragment extends Fragment {
 
     //FELDER
-    /*LOGGING  -  TESTEN ob etwas vohenden ist - siehe unten*/
+    /*LOG - TESTEN ob etwas vohenden ist - siehe unten*/
     public static final String TAG = AktienlisteFragment.class.getSimpleName();
+
+    //Feste Variable für die Keys für den InstanceState
+    private static final String STATE_DATA = "Finanzdaten";
+
     private ArrayAdapter<String> mAktienListeAdapter;
 
     //SwipeRefreshLayout - zum aktualisieren beim herunter-wischen in der App
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private ArrayList<String> aktienListe;
 
     /* default Konstruktor */
     public AktienlisteFragment(){
+        Log.d(TAG, "AktienlisteFragment: Fragment-Konstruktor wird aufgerufen ");
+    }
+    //-------------------------------------------------------------------------
+    // O P T I O N - M E N U und A C T I O N - B A R
+    // Hier teilen wir dem Fragment beim Erstellen mit, dass es ein Options Menu besitzen wird:
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Menü bekannt geben, dadurch kann unser Fragment Menü-Events verarbeiten
+        // erweitert das vorhandene Menu-Item wenn das Fragment "aktienlisteFragment" angezeigt wird
+        setHasOptionsMenu(true);
 
+        Log.d(TAG, "onCreate: Fragment erstellt");
     }
 
+    //-------------------------------------------------------------------------
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         //-------------------------------------------------------------------------
         /*LOGGING  -  TESTEN ob etwas vohenden ist*/
-        Log.d(TAG, "onCreateView: Debugmeldung " + getActivity().toString());
-        Log.e(TAG, "onCreateView: Errormeldung ");
+        Log.d(TAG, "onCreateView: FragmentView erstellt ");
+
 
         //-------------------------------------------------------------------------
-          /*Temporäre Dummy-Daten für die ListView über eine ArrayList<>*/
-//        //-> KANN AUFGRUND DES SWIPEREFRESH ENTFERNT WERDEN <-
-//        String [] aktienlisteArray = {
+
+
+        /*Temporäre Dummy-Daten für die ListView über eine ArrayList<>*/
+        //-> KANN AUFGRUND DES SWIPEREFRESH ENTFERNT WERDEN <-
+        String [] aktienlisteArray = {
 //                "Adidas - Kurs: 73,45 €",
 //                "Allianz - Kurs: 145,12 €",
 //                "BASF - Kurs: 84,27 €",
@@ -82,11 +103,19 @@ public class AktienlisteFragment extends Fragment {
 //                "Commerzbank - Kurs: 12,47 €",
 //                "Continental - Kurs: 209,94 €",
 //                "Daimler - Kurs: 84,33 €"
-//        };
+        };
+
+        //InstanceState:
+        if(savedInstanceState != null){
+            // Wiederherstellen der Werte des gespeicherten Fragment-Zustands
+            //aktienlisteArray = savedInstanceState.getStringArray(STATE_DATA);
+            aktienListe = savedInstanceState.getStringArrayList(STATE_DATA);
+        }else{
+            aktienListe = new ArrayList<>(Arrays.asList(aktienlisteArray));
+        }
 
 
-        //List<String> aktienListe = new ArrayList<>(Arrays.asList(aktienlisteArray));
-        List<String> aktienListe = new ArrayList<>();
+        //List<String> aktienListe = new ArrayList<>();
 
 
         /*ADAPTER für die Liste erzeugen  - über Refactoring*/
@@ -94,7 +123,7 @@ public class AktienlisteFragment extends Fragment {
                 getActivity() ,                         // Container - die View - wo kommt es her?
                 R.layout.list_item_aktienliste ,        // Aussehen - wie sollen die Einträge aussehen?
                 R.id.list_item_aktienliste_textview,    // Ausgabe - Wo kommt der einzelne Eintrag her?
-                aktienListe                             // Welche ArrayList - Beispieldaten in der ArrayList
+                aktienListe                             // Welche ArrayList - Beispieldaten in der ArrayList oder leere AL
 
         );
 
@@ -134,29 +163,91 @@ public class AktienlisteFragment extends Fragment {
 
         // Um die aktuellen Daten beim Starten zu laden die Methode  aktualisiereDaten() im onCreate() ausführen
         // -> die temporären Dummy-Daten werden dann nicht mehr angezeigt
-        aktualisiereDaten();
+//        aktualisiereDaten();
+
+        // Wenn eine leere Liste (DummyListe) vorhanden ist, dann aktualisiere die Liste/Daten
+        if(aktienListe.isEmpty()){
+            aktualisiereDaten();
+        }
 
         /*als Returntyp muss über inflater das Layout angegeben werden */
         return rootView;
     }
 
-    //-------------------------------------------------------------------------
-    // O P T I O N - M E N U und A C T I O N - B A R
-    // Hier teilen wir dem Fragment beim Erstellen mit, dass es ein Options Menu besitzen wird:
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // Menü bekannt geben, dadurch kann unser Fragment Menü-Events verarbeiten
-        // erweitert das vorhandene Menu-Item wenn das Fragment "aktienlisteFragment" angezeigt wird
-        setHasOptionsMenu(true);
+    public void onSaveInstanceState (Bundle outState) {
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(outState);
+        Log.d(TAG, "onSaveInstanceState: ");
+        //Speichern der ArrayList in dem Bundle
+        outState.putStringArrayList(STATE_DATA, aktienListe);
+    }
+    //-------------------------------------------------------------------------
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.d(TAG, "onAttach: Fragment an Activity gebunden");
     }
 
+    //-------------------------------------------------------------------------
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        //!Ab hier bereits zugriffe der Objekte von der Activity
+        Log.d(TAG, "onActivityCreated: Fragment ist fertig");
+    }
+    //-------------------------------------------------------------------------
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: Fragment wird gestartet");
+    }
+    //-------------------------------------------------------------------------
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: Fragment kann verwendet werden");
+    }
+    //-------------------------------------------------------------------------
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: Fragment geht in den Hintergrung");
+    }
+    //-------------------------------------------------------------------------
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: Fragment ist im Hintergund ");
+    }
+    //-------------------------------------------------------------------------
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d(TAG, "onDestroyView: FragmentView wird zerstört");
+    }
+    //-------------------------------------------------------------------------
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: Fragment selbst wird zerstört");
+    }
+    //-------------------------------------------------------------------------
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.d(TAG, "onDetach: Fragment wird von Activity gelöst");
+    }
+
+    //-------------------------------------------------------------------------
     //Hier füllen (inflate) wir das Options Menu mit dem Menüeintrag, den wir in der XML-Datei menu_aktienlistefragment.xml definiert haben.
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_aktienlistefragment, menu);
     }
 
+    //-------------------------------------------------------------------------
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -308,12 +399,14 @@ public class AktienlisteFragment extends Fragment {
 
             return ergebnis;
         }
+        //-------------------------------------------------------------------------
 
         @Override
         protected void onPreExecute() { //Sachen VOR der Ausführung - zb vorbereitung einer ProzessBar
             super.onPreExecute();
         }
 
+        //-------------------------------------------------------------------------
         @Override
         protected void onPostExecute(String[] strings) { //Sachen NACH der Ausführung - zb Arrayadapter mit den neuen Daten bestücken
 
@@ -334,7 +427,7 @@ public class AktienlisteFragment extends Fragment {
             }
             Toast.makeText(getActivity(), "Daten wurden vollständig geladen...", Toast.LENGTH_SHORT).show();
         }
-
+        //-------------------------------------------------------------------------
         @Override
         protected void onProgressUpdate(Integer... values) {
             Toast.makeText(getActivity(), values[0]+ " von " +values[1]+"geladen", Toast.LENGTH_SHORT).show();
@@ -396,4 +489,8 @@ public class AktienlisteFragment extends Fragment {
     }
 
     //-------------------------------------------------------------------------
+
+
+
+
 }

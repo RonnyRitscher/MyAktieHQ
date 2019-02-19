@@ -41,6 +41,15 @@ public class MainActivity extends AppCompatActivity {
     //------------------------------------------------------------------
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "onRestart: hier wird neu gestartet!  -> nach ausführen von onStop()");
+    }
+
+
+    //------------------------------------------------------------------
+
+    @Override
     protected void onStart() {
         super.onStart();
         Log.d(TAG, "onStart: kurz vor sichtbar werden!");
@@ -59,13 +68,43 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-
-        Log.d(TAG, "onPause: kurz vor in den Hintergrund gehen -> zum speichern von Änderungen des Benutzers -> (wird aufgerufen bevor eine andere Activity startet)");
+        super.onPause();
+        Log.d(TAG, "onPause: kurz vor in den Hintergrund gehen! -> zum speichern von Änderungen des Benutzers -> (wird aufgerufen bevor eine andere Activity startet)");
     }
 
 
     //------------------------------------------------------------------
-    
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: jetzt im Hintergrund und angehalten!");
+
+        /*
+        //SHARED-PREFERENCES -> speichern der eingegebenen Daten
+        //Shared-Pref Datei öffnen
+        SharedPreferences userSP = getSharedPreferences("UserPrefFile" , 0);
+        //Editor Klasse initialisieren (Umweg da direkter Zugriff nicht möglich ist)
+        SharedPreferences.Editor spEdior = userSP.edit();
+        //Text aus den (oberen) Textfeldern holen und in unsere Editor-Instanz schreiben
+        spEdior.putString("userName" , userName.getText().toString() );
+        //Speichern
+        spEdior.commit();
+        */
+
+    }
+
+    //------------------------------------------------------------------
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: Die Activity wurde beendet!");
+    }
+
+    //------------------------------------------------------------------
+
     //Methode zum einbinden des erstellten Menu-Items in dem Header-Bereich (...)
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -108,22 +147,4 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        /*
-        //SHARED-PREFERENCES -> speichern der eingegebenen Daten
-        //Shared-Pref Datei öffnen
-        SharedPreferences userSP = getSharedPreferences("UserPrefFile" , 0);
-        //Editor Klasse initialisieren (Umweg da direkter Zugriff nicht möglich ist)
-        SharedPreferences.Editor spEdior = userSP.edit();
-        //Text aus den (oberen) Textfeldern holen und in unsere Editor-Instanz schreiben
-        spEdior.putString("userName" , userName.getText().toString() );
-        //Speichern
-        spEdior.commit();
-        */
-
-    }
 }
