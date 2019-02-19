@@ -110,8 +110,11 @@ public class AktienlisteFragment extends Fragment {
             // Wiederherstellen der Werte des gespeicherten Fragment-Zustands
             //aktienlisteArray = savedInstanceState.getStringArray(STATE_DATA);
             aktienListe = savedInstanceState.getStringArrayList(STATE_DATA);
+            createAdapter();
         }else{
-            aktienListe = new ArrayList<>(Arrays.asList(aktienlisteArray));
+            aktienListe = new ArrayList<>();
+            createAdapter();
+            aktualisiereDaten();
         }
 
 
@@ -119,13 +122,7 @@ public class AktienlisteFragment extends Fragment {
 
 
         /*ADAPTER für die Liste erzeugen  - über Refactoring*/
-        mAktienListeAdapter = new ArrayAdapter<>(
-                getActivity() ,                         // Container - die View - wo kommt es her?
-                R.layout.list_item_aktienliste ,        // Aussehen - wie sollen die Einträge aussehen?
-                R.id.list_item_aktienliste_textview,    // Ausgabe - Wo kommt der einzelne Eintrag her?
-                aktienListe                             // Welche ArrayList - Beispieldaten in der ArrayList oder leere AL
-
-        );
+        createAdapter();
 
 
         // ---> Erstellen des ListViews und Zuweisen des ArrayAdapters und Layouts: <---
@@ -166,12 +163,22 @@ public class AktienlisteFragment extends Fragment {
 //        aktualisiereDaten();
 
         // Wenn eine leere Liste (DummyListe) vorhanden ist, dann aktualisiere die Liste/Daten
-        if(aktienListe.isEmpty()){
-            aktualisiereDaten();
-        }
+//        if(aktienListe.isEmpty()){
+//            aktualisiereDaten();      // -> hinzugefügt in die saveInstantState, daher hier nicht mehr benötigt
+//        }
 
         /*als Returntyp muss über inflater das Layout angegeben werden */
         return rootView;
+    }
+
+    private void createAdapter() {
+        mAktienListeAdapter = new ArrayAdapter<>(
+                getActivity() ,                         // Container - die View - wo kommt es her?
+                R.layout.list_item_aktienliste ,        // Aussehen - wie sollen die Einträge aussehen?
+                R.id.list_item_aktienliste_textview,    // Ausgabe - Wo kommt der einzelne Eintrag her?
+                aktienListe                             // Welche ArrayList - Beispieldaten in der ArrayList oder leere AL
+
+        );
     }
 
     @Override

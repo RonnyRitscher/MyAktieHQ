@@ -18,7 +18,8 @@
         android:theme="@style/AppTheme_User">
 
         <activity
-            android:name=".MainActivity">
+            android:name=".MainActivity"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action
                     android:name="android.intent.action.MAIN" />
@@ -59,3 +60,8 @@
     </application>
 
 </manifest>
+
+<!--  LEGENDE:
+android:launchMode="standard"  ->  erzeugt bei dem ZurückButton ein neues saveInstanceState-Objekt
+android:launchMode="singleTop"  ->  wenn vorhanden, dann nutz er das vorhandene saveInstanceState-Objekt
+-->
